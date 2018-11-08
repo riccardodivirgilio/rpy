@@ -61,9 +61,15 @@ class Command(SimpleCommand):
         kc = KeyChain(os.path.expanduser(location), password)
 
         if name and new_password:
+            old = kc.get_secret(name)
+            if old and not old == new_password:
+                self.print('Previous secret for %s:' % name, old)
             self.pbcopy(kc.set_secret(name, new_password))
         elif name:
             if delete:
+                old = kc.get_secret(name)
+                if old:
+                    self.print('Previous secret for %s:' % name, old)
                 kc.delete_secret(name)
                 self.pbcopy(self.default_secret(name, password))
             elif renew:
