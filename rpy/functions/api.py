@@ -32,3 +32,11 @@ fernet = API(
     loads = lambda payload, password: fernet.Fernet(password).decrypt(payload),
     dumps = lambda payload, password: fernet.Fernet(password).encrypt(force_bytes(payload)),
 )
+
+asyncio = API(
+    wait = 'asyncio.wait',
+    ensure_future = 'asyncio.ensure_future',
+    get_event_loop = 'asyncio.get_event_loop',
+    new_event_loop = 'asyncio.new_event_loop',
+    set_event_loop = 'asyncio.set_event_loop',
+)

@@ -20,7 +20,7 @@ async def wait_all(*args):
         return tuple(futures[i] for i in range(len(done)))
     return done
 
-def run_all(args, **opts):
+def run_all(*args, **opts):
     done = tuple(iterate(*args))
     if done and len(done) > 1:
         return asyncio.ensure_future(asyncio.wait(done), **opts)
@@ -36,6 +36,8 @@ def get_event_loop(loop=None):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         return loop
+
+
 
 
 @to_tuple
