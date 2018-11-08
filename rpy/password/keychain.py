@@ -64,3 +64,8 @@ class KeyChain(object):
     def set_secret(self, key, payload, secret_name = None):
         with open(self.get_location(secret_name, key), 'wb') as f:
             f.write(self.dumps(payload, password = self.get_password(secret_name)))  
+
+    def list_secrets(self, secret_name = None):
+        for file in os.scandir(self.get_location(secret_name)):
+            if not file.is_dir() and not file.name.startswith('.'):
+                yield file.name
