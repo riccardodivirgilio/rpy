@@ -30,7 +30,7 @@ python3 -m rpy pass facebook
 renew the password and store it persistently on "~/.passwords/"
 ```
 python3 -m rpy pass facebook --renew
-> Copied to clipboard: !G_NPflm0NIVVUESMDJ2rwsNzpVDOZQSqKquImwy16uQ=
+> Copied to clipboard: !6pBicHA2UtlorWb-criRrp7qVNf=
 ```
 
 list all created password
