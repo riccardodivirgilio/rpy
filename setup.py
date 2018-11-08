@@ -2,6 +2,10 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+#to publish
+#python3 setup.py sdist 
+#twine upload -r test dist/python-rpy-1.0.0.tar.gz 
+
 import sys
 import os
 import codecs
@@ -31,7 +35,7 @@ def load_tests():
     TestCommand().handle()
 
 setup(
-    name = 'rpy',
+    name = 'python-rpy',
     version = '1.0.0',
     description = 'A Python library with various functional tools.',
     long_description = read('README.rst'),

@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: python-rpy
+Version: 1.0.0
+Summary: A Python library with various functional tools.
+Home-page: UNKNOWN
+Author: Riccardo Di Virgilio
+Author-email: riccardodivirgilio@wolfram.com
+License: UNKNOWN
+Project-URL: Source code, https://github.com/WolframResearch/WolframClientForPython
+Project-URL: Documentation, https://wolfr.am/wolframclientdoc
+Project-URL: Wolfram Research, https://www.wolfram.com
+Description: UNKNOWN
+Keywords: password
+Platform: UNKNOWN
+Requires-Python: >=3.6
+Description-Content-Type: text/x-rst
