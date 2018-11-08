@@ -3,6 +3,8 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from rpy.functions.importutils import API
+from rpy.functions.encoding import force_bytes
+
 
 pip = API(
     main=('pip.main', 'pip._internal.main'),
@@ -18,5 +20,18 @@ pip = API(
 
 base64 = API(
     dumps='base64.b64encode', 
-    loads='base64.b64decode'
+    loads='base64.b64decode',
+    urlsafe_dumps='base64.urlsafe_b64encode',
+    urlsafe_loads='base64.urlsafe_b64decode'
+)
+
+json = API(
+    loads = 'json.loads', 
+    dumps = 'json.dumps'
+)
+
+fernet = API(
+    Fernet = 'cryptography.fernet.Fernet',
+    loads = lambda payload, password: fernet.Fernet(password).decrypt(payload),
+    dumps = lambda payload, password: fernet.Fernet(password).encrypt(force_bytes(payload)),
 )
