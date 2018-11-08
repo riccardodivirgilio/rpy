@@ -3,7 +3,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from rpy.functions.functional import composition
-
+from rpy.functions.datastructures import data
 
 def decorate(*func):
     comp = composition(*func)
@@ -19,6 +19,7 @@ def decorate(*func):
 
 to_tuple = decorate(tuple)
 to_dict = decorate(dict)
+to_data = decorate(data)
 
 
 class cached_property(object):
