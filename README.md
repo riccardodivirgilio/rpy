@@ -1,7 +1,6 @@
-# rpy
-Collections of functional utilities
+# Installation
 
-python3 -m pip install python-rpy
+`python3 -m pip install python-rpy`
 
 ## Password manager
 
