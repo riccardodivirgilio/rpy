@@ -43,7 +43,7 @@ pass
 delete the password and return the default password
 ```
 pass facebook --delete
-> Previous secret for facebook: !G_NPflm0NIVVUESMDJ2rwsNzpVDOZQSqKquImwy16uQ=
+> Previous secret for facebook: !6pBicHA2UtlorWb-criRrp7qVNf=
 > Copied to clipboard: !mBg7+lOKsbc4chxHeVmhIJuORi4=
 ```
 
