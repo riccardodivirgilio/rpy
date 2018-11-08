@@ -16,8 +16,8 @@ create a folder to store passwords
 save those as ENV_VARIABLES
 
 ```
-export PASS_DEFAULT_PASSWORD="SSXK6xR-9LI7L0VhIfOdRJh7t4_g4yqozHF9fIXgkNg="`
-export PASS_DEFAULT_LOCATION="~/.passwords/"
+export PASS_DEFAULT_PASSWORD="MyVerySuperSecretPasswordBase64UrlSafeEncod" # The one that was created with python3 -m rpy create_password
+export PASS_DEFAULT_LOCATION="~/.passwords/" # the directory you just created
 ```
 
 get the default password by using an hash with the secret
