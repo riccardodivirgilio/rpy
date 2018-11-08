@@ -78,4 +78,4 @@ class Command(SimpleCommand):
                 self.pbcopy(kc.get_secret(name) or self.default_secret(name, password))
         else:
             for name in kc.list_secrets():
-                self.output(name)
+                self.print(name)
