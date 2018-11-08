@@ -46,7 +46,7 @@ class Command(SimpleCommand):
             )
 
     def new_secret(self, name):
-        return "!%s" % force_text(fernet.Fernet.generate_key())
+        return "!%s=" % force_text(fernet.Fernet.generate_key()[0:27])
 
     def pbcopy(self, text):
         self.print('Copied to clipboard:', text)
