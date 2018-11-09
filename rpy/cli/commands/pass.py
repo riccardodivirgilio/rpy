@@ -58,7 +58,7 @@ class Command(SimpleCommand):
         password = validate(default_password, 'PASS_DEFAULT_PASSWORD', name='password')
         hashkey  = validate(default_hashkey or default_password, 'PASS_DEFAULT_HASHKEY', name='default_hashkey')
 
-        kc = KeyChain(os.path.expanduser(location), password)
+        kc = KeyChain(default = {'location': location, 'password': password})
 
         if name and new_password:
             old = kc.get_secret(name)
