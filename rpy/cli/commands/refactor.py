@@ -25,7 +25,10 @@ class Command(SimpleCommand):
         for arg in args:
             yield arg
 
-    def handle(self, **opts):
+    def add_arguments(self, parser):
+        parser.add_argument('--yapf', dest='use_yapf', default=False, action = 'store_true')
+
+    def handle(self, use_yapf = False, **opts):
 
         argv = sys.argv
 
@@ -48,11 +51,13 @@ class Command(SimpleCommand):
 
         main()
 
-        import yapf
+        if use_yapf:
 
-        sys.argv = list(
-            self._module_args('--in-place', '--recursive', '--parallel'))
+            import yapf
 
-        yapf.run_main()
+            sys.argv = list(
+                self._module_args('--in-place', '--recursive', '--parallel'))
 
-        sys.argv = argv
+            yapf.run_main()
+
+            sys.argv = argv
