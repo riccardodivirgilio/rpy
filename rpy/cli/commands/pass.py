@@ -35,6 +35,7 @@ class Command(SimpleCommand):
 
         parser.add_argument('--delete',  dest='delete', default=False, action = 'store_true')
         parser.add_argument('--renew',   dest='renew',  default=False, action = 'store_true')
+        parser.add_argument('--print',   dest='printonly',  default=False, action = 'store_true')
 
     def default_secret(self, name, password):
         return "!%s" % force_text(
@@ -48,11 +49,13 @@ class Command(SimpleCommand):
     def new_secret(self, name):
         return "!%s=" % force_text(fernet.Fernet.generate_key()[0:27])
 
-    def pbcopy(self, text):
+    def pbcopy(self, text, printonly = False):
+        if printonly:
+            return self.print(text)
         self.print('Copied to clipboard:', text)
         return _pbcopy(text)
 
-    def handle(self, name = None, new_password = None, default_password = None, default_location = None, default_hashkey = None, delete = False, renew = False, pbcopy = False, **opts):
+    def handle(self, name = None, new_password = None, default_password = None, default_location = None, default_hashkey = None, delete = False, renew = False, printonly = False, **opts):
 
         location = validate(default_location or '~/.passwords/', 'PASS_DEFAULT_LOCATION', name='location')
         password = validate(default_password, 'PASS_DEFAULT_PASSWORD', name='password')
@@ -64,18 +67,18 @@ class Command(SimpleCommand):
             old = kc.get_secret(name)
             if old and not old == new_password:
                 self.print('Previous secret for %s:' % name, old)
-            self.pbcopy(kc.set_secret(name, new_password))
+            self.pbcopy(kc.set_secret(name, new_password), printonly = printonly)
         elif name:
             if delete:
                 old = kc.get_secret(name)
                 if old:
                     self.print('Previous secret for %s:' % name, old)
                 kc.delete_secret(name)
-                self.pbcopy(self.default_secret(name, password))
+                self.pbcopy(self.default_secret(name, password), printonly = printonly)
             elif renew:
-                self.pbcopy(kc.set_secret(name, self.new_secret(name)))
+                self.pbcopy(kc.set_secret(name, self.new_secret(name)), printonly = printonly)
             else:
-                self.pbcopy(kc.get_secret(name) or self.default_secret(name, password))
+                self.pbcopy(kc.get_secret(name) or self.default_secret(name, password), printonly = printonly)
         else:
             for name in kc.list_secrets():
                 self.print(name)
