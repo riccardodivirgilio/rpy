@@ -19,9 +19,9 @@ def _parse_settings(opts):
     for name, value in opts.items():
         if not isinstance(value, dict):
             l, p = value
-            yield name, data(location = l, password = p)
+            yield name, data(location = os.path.expanduser(l), password = p)
         else:
-            yield name, data(location = value['location'], password = value['password'])
+            yield name, data(location = os.path.expanduser(value['location']), password = value['password'])
 
 
 class KeyChain(object):
