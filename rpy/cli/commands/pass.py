@@ -65,13 +65,13 @@ class Command(SimpleCommand):
 
         if name and new_password:
             old = kc.get_secret(name)
-            if old and not old == new_password:
+            if old and not old == new_password and not printonly:
                 self.print('Previous secret for %s:' % name, old)
             self.pbcopy(kc.set_secret(name, new_password), printonly = printonly)
         elif name:
             if delete:
                 old = kc.get_secret(name)
-                if old:
+                if old and not printonly:
                     self.print('Previous secret for %s:' % name, old)
                 kc.delete_secret(name)
                 self.pbcopy(self.default_secret(name, password), printonly = printonly)
