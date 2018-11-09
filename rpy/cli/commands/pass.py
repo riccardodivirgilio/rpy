@@ -63,6 +63,9 @@ class Command(SimpleCommand):
 
         kc = KeyChain(default = {'location': location, 'password': password})
 
+        if name:
+            name = name.lower()
+
         if name and new_password:
             old = kc.get_secret(name)
             if old and not old == new_password and not printonly:
