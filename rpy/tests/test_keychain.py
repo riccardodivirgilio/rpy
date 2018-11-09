@@ -18,7 +18,7 @@ class TestCase(unittest.TestCase):
 
         f1, p1 = self.credentials()
 
-        kc = KeyChain(f1, p1)
+        kc = KeyChain(default = {'location': f1, 'password': p1})
         kc.set_secret("foo", {"x": 2})
 
         self.assertEqual(kc.get_secret("foo"), {"x": 2})
@@ -32,16 +32,9 @@ class TestCase(unittest.TestCase):
         f3, p3 = self.credentials()
 
         kc = KeyChain(
-            {
-                'default': f1,
-                'sensitive': f2,
-                'developer': f3
-            },
-            {
-                'default': p1,
-                'sensitive': p2,
-                'developer': p3
-            },
+            default = (f1, p1),
+            sensitive = {'password': p2, 'location': f2},
+            developer = {'password': p3, 'location': f3}
         )
 
         for secret_name in ('default', 'sensitive', 'developer', None):
