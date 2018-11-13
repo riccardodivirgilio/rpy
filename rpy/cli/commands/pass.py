@@ -11,7 +11,6 @@ from rpy.cli.utils import SimpleCommand
 from rpy.functions.api import base64, fernet
 from rpy.functions.encoding import force_bytes, force_text
 from rpy.password.keychain import KeyChain
-from rpy.functions.pbcopy import pbcopy as _pbcopy
 
 def validate(s, env, name):
     if not s:
@@ -49,12 +48,6 @@ class Command(SimpleCommand):
     def new_secret(self, name):
         return "!%s=" % force_text(fernet.Fernet.generate_key()[0:27])
 
-    def pbcopy(self, text, printonly = False):
-        if printonly:
-            return self.print(text)
-        self.print('Copied to clipboard:', text)
-        return _pbcopy(text)
-
     def handle(self, name = None, new_password = None, default_password = None, default_location = None, default_hashkey = None, delete = False, renew = False, printonly = False, **opts):
 
         location = validate(default_location or '~/.passwords/', 'PASS_DEFAULT_LOCATION', name='location')
@@ -70,18 +63,18 @@ class Command(SimpleCommand):
             old = kc.get_secret(name)
             if old and not old == new_password and not printonly:
                 self.print('Previous secret for %s:' % name, old)
-            self.pbcopy(kc.set_secret(name, new_password), printonly = printonly)
+            self.print(kc.set_secret(name, new_password), printonly = printonly)
         elif name:
             if delete:
                 old = kc.get_secret(name)
                 if old and not printonly:
                     self.print('Previous secret for %s:' % name, old)
                 kc.delete_secret(name)
-                self.pbcopy(self.default_secret(name, password), printonly = printonly)
+                self.print(self.default_secret(name, password), printonly = printonly)
             elif renew:
-                self.pbcopy(kc.set_secret(name, self.new_secret(name)), printonly = printonly)
+                self.print(kc.set_secret(name, self.new_secret(name)), printonly = printonly)
             else:
-                self.pbcopy(kc.get_secret(name) or self.default_secret(name, password), printonly = printonly)
+                self.print(kc.get_secret(name) or self.default_secret(name, password), printonly = printonly)
         else:
             for name in kc.list_secrets():
                 self.print(name)
