@@ -43,7 +43,7 @@ setup(
     long_description_content_type = 'text/x-rst',
     keywords=['password'],
     author = 'Riccardo Di Virgilio',
-    author_email = 'riccardodivirgilio@wolfram.com',
+    author_email = 'riccardodivirgilio@gmail.com',
     include_package_data=True,
     packages=find_packages(),
     test_suite='setup.load_tests',
@@ -52,8 +52,6 @@ setup(
 
     ],
     project_urls={
-        'Source code': 'https://github.com/WolframResearch/WolframClientForPython',
-        'Documentation': 'https://wolfr.am/wolframclientdoc',
-        'Wolfram Research': 'https://www.wolfram.com'
+
     }
 )
