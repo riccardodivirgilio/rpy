@@ -9,7 +9,6 @@ from rpy.functions.datastructures import data
 from rpy.functions.encoding import force_bytes
 from rpy.functions.functional import iterate, first
 from rpy.functions.decorators import to_data
-from rpy.functions.importutils import safe_import_string
 
 @to_data
 def _parse_settings(opts):
@@ -27,12 +26,12 @@ def _parse_settings(opts):
 
 class KeyChain(object):
 
-    def __init__(self, serializer = None, cypher = None, **opts):
+    serializer = json
+    cypher = fernet
+
+    def __init__(self, **opts):
         self.settings = _parse_settings(opts)
         self.default_name = first(self.settings.keys())
-
-        self.serializer = safe_import_string(serializer or json)
-        self.cypher     = safe_import_string(cypher or fernet)
 
     def loads(self, payload, password):
         return self.serializer.loads(
