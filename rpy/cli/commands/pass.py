@@ -63,18 +63,18 @@ class Command(SimpleCommand):
             old = kc.get_secret(name)
             if old and not old == new_password and not printonly:
                 self.print('Previous secret for %s:' % name, old)
-            self.print(kc.set_secret(name, new_password), printonly = printonly)
+            self.print(kc.set_secret(name, new_password))
         elif name:
             if delete:
                 old = kc.get_secret(name)
                 if old and not printonly:
                     self.print('Previous secret for %s:' % name, old)
                 kc.delete_secret(name)
-                self.print(self.default_secret(name, password), printonly = printonly)
+                self.print(self.default_secret(name, password))
             elif renew:
-                self.print(kc.set_secret(name, self.new_secret(name)), printonly = printonly)
+                self.print(kc.set_secret(name, self.new_secret(name)))
             else:
-                self.print(kc.get_secret(name) or self.default_secret(name, password), printonly = printonly)
+                self.print(kc.get_secret(name) or self.default_secret(name, password))
         else:
             for name in kc.list_secrets():
                 self.print(name)
