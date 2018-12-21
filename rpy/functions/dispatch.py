@@ -101,16 +101,10 @@ class Dispatch(object):
             raise ValueError('Function %s is not callable' % function)
 
         if not types:
-            if self.default_function:
-                raise TypeError(
-                    "Dispatch already has a default function registred.")
             self.default_function = function
             return self.default_function
 
         for t in self.validate_types(*types):
-            if t in self.dispatchdict:
-                raise TypeError(
-                    "Duplicated registration for input type(s): %s" % (t, ))
             self.dispatchdict[t] = function
 
         return function
