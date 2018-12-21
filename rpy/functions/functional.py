@@ -4,6 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from functools import reduce
 from itertools import islice
+import inspect
 
 from rpy.functions import six
 
@@ -41,7 +42,7 @@ def composition(*functions):
 def is_iterable(obj, exclude_list=six.string_types):
     if isinstance(obj, exclude_list):
         return False
-    return hasattr(obj, '__iter__')
+    return not inspect.isclass(obj) and hasattr(obj, '__iter__')
 
 
 def iterate(*args):
