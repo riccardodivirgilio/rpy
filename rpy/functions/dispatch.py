@@ -79,10 +79,9 @@ class Dispatch(object):
 
     def update(self, dispatch, update_default=False):
         if isinstance(dispatch, Dispatch):
-            for t, function in dispatch.dispatchdict.items():
-                self.register(function, t)
+            self.dispatchdict.update(dispatch.dispatchdict)
             if update_default and dispatch.default_function:
-                self.register_default(dispatch.default_function)
+                self.register(dispatch.default_function)
         elif isinstance(dispatch, dict):
             for t, function in dispatch.items():
                 self.register(function, t)
