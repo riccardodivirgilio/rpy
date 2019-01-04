@@ -26,17 +26,11 @@ def last(iterable, default=None):
 def identity(x):
     return x
 
-
 def composition(*functions):
-
-    if not functions:
-        return identity
-
-    if len(functions) == 1:
-        return first(functions)
-
-    return reduce(lambda f, g: lambda *args, **kw: f(g(*args, **kw)),
-                  reversed(functions))
+    return reduce(
+        lambda f, g: lambda *args, **kw: f(g(*args, **kw)),
+        reversed(functions or (identity, ))
+    )
 
 
 def is_iterable(obj, exclude_list=six.string_types):
