@@ -4,8 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import unittest
 
-from rotostampa.utils.symbolic import evaluate, sym
-
+from rpy.dataframe.symbolic import evaluate, sym
 
 class SymbolicTest(unittest.TestCase):
 
