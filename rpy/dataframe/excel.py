@@ -3,19 +3,12 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from decimal import Decimal
-
-from django.db.models.base import ModelBase
-from django.utils import six
-from django.utils.encoding import force_text
-from django.utils.six import BytesIO
-
+from rpy.functions import six
+from rpy.functions.encoding import force_bytes, force_text
 from itertools import count, islice, product, repeat
 
 from rpy.functions.dispatch import Dispatch
-
-from workflow.objects.i18n.currency.money import Money
-from workflow.objects.measure.base import MeasureBase, P, T
-from workflow.utils.decorators import to_tuple
+from rpy.functions.decorators import to_tuple
 
 import datetime
 
@@ -39,9 +32,7 @@ def get_excel_names(r):
 
 write = Dispatch()
 
-@write.dispatch(ModelBase)
-def handle(self, value, y, x):
-    return write(self, value.pk, y, x)
+
 
 @write.dispatch(Formula)
 def handle(self, value, y, x):
@@ -56,7 +47,7 @@ def handle(self, value, y, x):
 def handle(self, value, y, x):
     return write(self, "-".join([force_text(v) for v in value]), y, x)
 
-@write.dispatch((datetime.timedelta, T))
+@write.dispatch(datetime.timedelta)
 def handle(self, value, y, x):
     return self.worksheet.write_formula(y, x, '=TIME(0, 0, 0) + (%s / 86400) - TIME(0, 0, 0)' % value.total_seconds())
 
@@ -91,24 +82,6 @@ def handle(self, value, y, x):
         value.microsecond / 1000000,
         ),
         cell_format = self.get_format('time_format', 21)
-        )
-
-@write.dispatch(P)
-def handle(self, value, y, x):
-    return self.worksheet.write_formula(y, x, '=%s' % value.standard,
-        cell_format = self.get_format('perc_format', 10) # 0.00%
-        )
-
-@write.dispatch(MeasureBase)
-def handle(self, value, y, x):
-    return self.worksheet.write_formula(y, x, '=%s' % value.standard,
-        cell_format = self.get_format('%s_format' % value.STANDARD_UNIT, '#,###.00 "%s"' % value.STANDARD_UNIT)
-        )
-
-@write.dispatch(Money)
-def handle(self, value, y, x):
-    return self.worksheet.write_formula(y, x, '=%s' % value.get_rounding(),
-        cell_format = self.get_format('%s_format' % value.currency.code, '#,###.00 "%s"' % (value.currency.symbol or value.currency.code))
         )
 
 @write.dispatch(int)
@@ -210,7 +183,7 @@ class XLSXWriter(object):
         self.workbook.close()
 
 def write_to_stream(lines, stream = None, **opts):
-    s = stream or BytesIO()
+    s = stream or six.BytesIO()
     if not isinstance(lines, dict):
         lines = {'Data': lines}
     with XLSXWriter(s, name = None, **opts) as writer:
