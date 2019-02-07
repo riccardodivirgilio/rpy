@@ -6,6 +6,7 @@ import unittest
 
 from rpy.dataframe.symbolic import evaluate, sym
 
+
 class SymbolicTest(unittest.TestCase):
 
     def test_symbolic(self):
