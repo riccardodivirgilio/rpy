@@ -3,9 +3,9 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from rpy.functions import six
-
 from rpy.functions.datastructures import data
 from rpy.functions.importutils import import_string_and_call
+
 
 def fixargs(kw):
     #fix for py2/py3 inconsistency, delimiter must be bytes in py2 and text in py3

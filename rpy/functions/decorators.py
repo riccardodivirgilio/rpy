@@ -2,8 +2,9 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from rpy.functions.functional import composition
 from rpy.functions.datastructures import data
+from rpy.functions.functional import composition
+
 
 def decorate(*func):
     def inner(fn):

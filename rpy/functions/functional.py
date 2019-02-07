@@ -2,9 +2,9 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import inspect
 from functools import reduce
 from itertools import islice
-import inspect
 
 from rpy.functions import six
 

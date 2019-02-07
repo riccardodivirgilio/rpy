@@ -2,15 +2,14 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import datetime
 from decimal import Decimal
-from rpy.functions import six
-from rpy.functions.encoding import force_bytes, force_text
 from itertools import count, islice, product, repeat
 
-from rpy.functions.dispatch import Dispatch
+from rpy.functions import six
 from rpy.functions.decorators import to_tuple
-
-import datetime
+from rpy.functions.dispatch import Dispatch
+from rpy.functions.encoding import force_text
 
 XLSX_MYMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 

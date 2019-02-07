@@ -12,6 +12,7 @@ from rpy.functions.api import base64, fernet
 from rpy.functions.encoding import force_bytes, force_text
 from rpy.password.keychain import KeyChain
 
+
 def validate(s, env, name):
     if not s:
         try:

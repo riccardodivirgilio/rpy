@@ -4,7 +4,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import subprocess
 
-from rpy.functions.encoding import force_bytes, force_text
+from rpy.functions.encoding import force_bytes
+
 
 def pbcopy(text):
     p = subprocess.Popen(['pbcopy'], stdin=subprocess.PIPE)

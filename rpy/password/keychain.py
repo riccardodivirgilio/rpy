@@ -6,9 +6,9 @@ import os
 
 from rpy.functions.api import fernet, json
 from rpy.functions.datastructures import data
-from rpy.functions.encoding import force_bytes
-from rpy.functions.functional import iterate, first
 from rpy.functions.decorators import to_data
+from rpy.functions.functional import first
+
 
 @to_data
 def _parse_settings(opts):
