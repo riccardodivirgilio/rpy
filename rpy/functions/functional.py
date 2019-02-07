@@ -9,6 +9,11 @@ import inspect
 from rpy.functions import six
 
 
+def partial(f, *args, **opts):
+    def curried(*args1, **opts1):
+        return f(*args, *args1, **dict(opts, **opts1))
+    return curried
+
 def first(iterable, default=None):
     try:
         return next(iter(iterable))

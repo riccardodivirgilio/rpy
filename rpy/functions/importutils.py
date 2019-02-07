@@ -43,6 +43,8 @@ def import_string(dotted_path):
         raise ImportError('Module "%s" does not define a "%s" attribute/class'
                           % (module_path, class_name))
 
+def import_string_and_call(import_path, *args, **kw):
+    return import_string(import_path)(*args, **kw)
 
 def safe_import_string(f):
     if isinstance(f, (list, tuple)):

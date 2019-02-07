@@ -2,9 +2,7 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from functools import partial
-
-from rpy.functions.functional import iterate
+from rpy.functions.functional import iterate, partial
 
 import os
 import subprocess
