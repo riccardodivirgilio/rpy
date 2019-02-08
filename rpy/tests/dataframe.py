@@ -11,6 +11,12 @@ class DataframeTest(unittest.TestCase):
 
     def test_dataframe(self):
 
-        frame = DataFrame([1, 2, 3])
+        print()
 
-        print(frame, frame.columns)
+        frame = DataFrame([1, 2, 3], columns = (
+            lambda i: i,
+            lambda i: i+2,
+            lambda i: i+4,
+            ))
+
+        print(frame[0][0])

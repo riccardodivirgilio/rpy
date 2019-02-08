@@ -20,6 +20,5 @@ class SymbolicTest(unittest.TestCase):
             (sym.x['foo'], {'x': {'foo': 2}}, 2),
             (sym.x[2:3], {'x': [1, 2, 3, 4, 5]}, [3]),
             ):
-
             self.assertEqual(evaluate(expr), expr)
             self.assertEqual(evaluate(expr, context), result)
