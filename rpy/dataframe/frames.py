@@ -50,9 +50,9 @@ class DataColumn(object):
         return '<%s %s>' % (self.__class__.__name__, self.name or 'unnamed')
 
 to_data_column = Dispatch()
-to_data_column.register(lambda d, i: DataColumn(index = i, **d), dict)
-to_data_column.register(lambda d, i: d.copy(index = i), DataColumn)
-to_data_column.register(lambda d, i: DataColumn(d, index = i))
+to_data_column.register(lambda d, **opts: DataColumn(**opts, **d), dict)
+to_data_column.register(lambda d, **opts: d.copy(**opts), DataColumn)
+to_data_column.register(lambda d, **opts: DataColumn(d, **opts))
 
 class AtomData(object):
 
@@ -113,9 +113,16 @@ class ArrayData(Sequence):
 class DataFrame(Mapping):
 
     def __init__(self, array, columns):
-        self.columns_list = tuple(
-            to_data_column(c, i) for i, c in enumerate(columns)
-        )
+        if isinstance(columns, dict):
+            self.columns_list = tuple(
+                to_data_column(columns[name], name = name, index = index)
+                for index, name in enumerate(columns.keys())
+            )
+        else:
+            self.columns_list = tuple(
+                to_data_column(c, index = index) 
+                for index, c in enumerate(columns)
+            )
         self.columns_dict = {
             column.get_name(): column
             for column in self.columns_list
