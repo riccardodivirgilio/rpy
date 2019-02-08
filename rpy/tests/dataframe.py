@@ -57,7 +57,7 @@ class DataframeTest(unittest.TestCase):
 
         with open('/Users/rdv/Desktop/test.xlsx', 'wb') as stream:
             write_to_stream(
-                frame.excel_formula(),
+                {'formula': frame.excel_formula(), 'value': frame.value()},
                 stream = stream
             )
 
