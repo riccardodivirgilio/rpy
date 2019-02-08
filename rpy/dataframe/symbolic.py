@@ -69,7 +69,7 @@ def create_function_call(attr, func):
     return func
 
 def issymbolic(expr):
-    return isinstance(expr, (Symbol, Function))
+    return isinstance(expr, Symbolic)
 
 def create_shield_func(func, name = None):
     def shield(*args, **opts):
@@ -91,7 +91,10 @@ def create_default_context():
 def proxy(attr, self, *args, **kwargs):
     return Symbol(attr)(self, *args, **kwargs)
 
-class ExpressionMeta(object):
+class Symbolic:
+    pass
+
+class ExpressionMeta(Symbolic):
 
     def __bool__(self):
         return True
