@@ -48,11 +48,10 @@ class DataframeTest(unittest.TestCase):
             headers = {
                 'baz': lambda i: i,
                 'foo': lambda i: sym.baz + 2,
-                'bar': lambda i: sym.foo + datetime.datetime.now(),
-                'arr': lambda i: [1, 2, 3],
-                #'pow': lambda i: sym.bar ** 2,
-                #'baz': lambda i: sym.sum(sym.dataframe['bar']),
-                #'bax': lambda i: sym.sum(sym.dataframe['foo']),
+                'bar': lambda i: datetime.datetime.now(),
+                'pow': lambda i: sym.foo ** 2,
+                'sum1': lambda i: sym.sum(sym.dataframe['baz']),
+                'sum2': lambda i: sym.sum(sym.dataframe['pow']),
             }, 
         )
 

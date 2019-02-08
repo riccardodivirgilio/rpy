@@ -17,16 +17,19 @@ XLSX_MYMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.she
 
 class Formula(object):
 
-    def __init__(self, formula, cell_format = None, extimated_size = None):
+    def __init__(self, formula, cell_format = None, extimated_size = None, needs_parenthesis = True):
         self.formula     = formula
         self.cell_format = cell_format
         self.extimated_size = extimated_size
+        self.needs_parenthesis = needs_parenthesis
 
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.formula)
 
     def __str__(self):
-        return '(%s)' % self.formula
+        if self.needs_parenthesis:
+            return '(%s)' % self.formula
+        return self.formula
 
 def _column_name_generator(alphabeth = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
     for i in count(1):
@@ -77,7 +80,7 @@ class CallableText(object):
             else:
                 arg = to_formula(arg)
                 if isinstance(arg, Formula):
-                    yield '(%s)' % arg.formula
+                    yield force_text(arg)
                 elif arg:
                     yield escape(arg)
 
@@ -103,7 +106,7 @@ def handle(value):
 
 @to_formula.dispatch(bool)
 def handle(value):
-    return Formula(value and 'TRUE' or 'FALSE', extimated_size = value and 4 or 5)
+    return Formula(value and 'TRUE' or 'FALSE', extimated_size = value and 4 or 5, needs_parenthesis = False)
 
 @to_formula.dispatch(datetime.timedelta)
 def handle(value):
@@ -129,7 +132,8 @@ def handle(value):
     return Formula(
         'DATE(%s, %s, %s)' % (value.year, value.month, value.day),
         cell_format = ('date_format', 15),
-        extimated_size = 9
+        extimated_size = 9, 
+        needs_parenthesis = False
     )
 
 @to_formula.dispatch(datetime.time)
@@ -142,13 +146,15 @@ def handle(value):
             value.microsecond / 1000000,
         ),
         cell_format = ('time_format', 21),
-        extimated_size = 8
+        extimated_size = 8,
+        needs_parenthesis = False
     )
 
 @to_formula.dispatch(int)
 def handle(value):
     return Formula(
         '%s' % value,
+        needs_parenthesis = False,
         cell_format = ('int_format', 3) # #,##0
     )
 
@@ -156,6 +162,7 @@ def handle(value):
 def handle(value):
     return Formula(
         '%s' % value,
+        needs_parenthesis = False,
         cell_format = ('dec_format', 4) # #,##0.00
     )
 
