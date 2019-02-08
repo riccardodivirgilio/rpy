@@ -46,13 +46,13 @@ class DataframeTest(unittest.TestCase):
         frame = DataFrame(
             [1, 2, 3], 
             headers = {
-                'baz': lambda i: i,
-                'foo': lambda i: sym.baz + 2,
-                'bar': lambda i: datetime.datetime.now(),
-                'pow': lambda i: sym.foo ** 2,
+                'baz':  lambda i: i,
+                'foo':  lambda i: sym.baz + 2,
+                'bar':  lambda i: datetime.datetime.now(),
+                'pow':  lambda i: sym.foo ** 2,
                 'sum1': lambda i: sym.sum(sym.dataframe['baz']),
                 'sum2': lambda i: sym.sum(sym.dataframe['pow']),
-            }, 
+            },
         )
 
         with open('/Users/rdv/Desktop/test.xlsx', 'wb') as stream:
