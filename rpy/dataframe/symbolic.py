@@ -2,6 +2,9 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+from itertools import chain
+
+from rpy.functions.decorators import to_dict
 from rpy.functions.dispatch import Dispatch
 from rpy.functions.functional import iterate, partial, reduce
 
@@ -65,10 +68,25 @@ def create_function_call(attr, func):
         return reduce(m, args)
     return func
 
-DEFAULT_CONTEXT = {
-    name: create_function_call(attr, func)
-    for attr, name, func in builtin
-}
+def issymbolic(expr):
+    return isinstance(expr, (Symbol, Function))
+
+def create_shield_func(func, name = None):
+    def shield(*args, **opts):
+        if any(map(issymbolic, chain(args, opts.values(), opts.keys()))):
+            return Symbol(name or func.__name__)(*args, **opts)
+        return func(*args, **opts)
+    return shield
+
+@to_dict
+def create_default_context():
+    for attr, name, func in builtin:
+        yield name, create_function_call(attr, func)
+
+    for func in (
+        sum, float, int, reduce, map, 
+        ):
+        yield func.__name__, create_shield_func(func)
 
 def proxy(attr, self, *args, **kwargs):
     return Symbol(attr)(self, *args, **kwargs)
@@ -92,7 +110,7 @@ class Symbol(ExpressionMeta):
         self.__symbolname__ = name
 
     def __hash__(self):
-        return hash((Symbol.__name__, self.__symbolname__))
+        return hash(self.__symbolname__)
 
     def __len__(self):
         return 0  #consistent with Length(x)
@@ -142,10 +160,12 @@ class SymbolFactory(object):
 evaluate_with_context = Dispatch()
 
 @evaluate_with_context.dispatch(Symbol)
-def evaluate_symbol(symbol, context):
+def evaluate_symbol(symbol, context, missing_function = None):
     try:
         result = context[symbol.__symbolname__]
     except KeyError:
+        if missing_function:
+            return evaluate_with_context(missing_function(symbol), context)
         return symbol
 
     return evaluate_with_context(result, context)
@@ -172,8 +192,8 @@ def evaluate_generic(mapping, *args, **opts):
 def evaluate_generic(obj, *args, **opts):
     return obj
 
-def evaluate(symbol, context = {}, default_context = DEFAULT_CONTEXT):
+def evaluate(symbol, context = {}, default_context = create_default_context(), **opts):
     context.update(default_context)
-    return evaluate_with_context(symbol, context)
+    return evaluate_with_context(symbol, context, **opts)
 
 sym = SymbolFactory()
