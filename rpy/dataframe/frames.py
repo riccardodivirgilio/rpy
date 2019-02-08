@@ -64,11 +64,16 @@ class AtomData(object):
     def formatted(self):
         return self.column.format(self.value)
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.value == other.value
+        return self.value == other
+
+    def __hash__(self):
+        return hash(self.value)
+
     def __repr__(self):
-        return format_table((
-            (self.column.get_name(), ),
-            (self.formatted(), )
-        ))
+        return self.formatted()
 
     def __str__(self):
         return self.formatted()
@@ -81,6 +86,14 @@ class ArrayData(Sequence):
             AtomData(obj, column)
             for obj in array
         )
+
+    def __hash__(self):
+        return hash(self.array)
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.array == other.array
+        return self.array == other
 
     @to_tuple
     def formatted(self):
@@ -116,8 +129,11 @@ class DataFrame(Mapping):
     def formatted(self):
         return zip(*(column.formatted() for column in self.values()))
 
+    def __hash__(self):
+        return hash(self.table)
+
     def __getitem__(self, value):
-        if not isinstance(value, six.integer_types):
+        if not isinstance(value, (six.integer_types, slice)):
             value = self.columns_dict[value].index
         try:
             return self.table[value]

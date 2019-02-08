@@ -9,14 +9,14 @@ from rpy.dataframe.frames import DataFrame
 
 class DataframeTest(unittest.TestCase):
 
-    def test_dataframe(self):
-
-        print()
+    def test_dataframe_slice(self):
 
         frame = DataFrame([1, 2, 3], columns = (
             lambda i: i,
             lambda i: i+2,
-            lambda i: i+4,
+            dict(function = lambda i: i+4, name = 'last'),
             ))
-
-        print(frame[0][0])
+        self.assertEqual(frame[0], (1, 2, 3))
+        self.assertEqual(frame[1], (3, 4, 5))
+        self.assertEqual(frame['last'], (5, 6, 7))
+        self.assertEqual(frame['last'][0], 5)
