@@ -84,4 +84,9 @@ def partition(iterable, n):
         res = tuple(islice(iterable, n))
 
 def delete_duplicates(iterable, key = identity):
-    return OrderedDict((key(el), el) for el in iterable).values()
+    d = OrderedDict()
+    for el in iterable:
+        k = key(el)
+        if not k in d:
+            d[k] = el
+    return tuple(d.values())

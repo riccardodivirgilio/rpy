@@ -26,16 +26,33 @@ class TestCase(unittest.TestCase):
     def test_delete_duplicates(self):
 
         self.assertEqual(
-            tuple(delete_duplicates(())),
+            delete_duplicates(()),
             ()
         )
 
         self.assertEqual(
-            tuple(delete_duplicates((1, 1))),
+            delete_duplicates((1, 1)),
             (1, )
         )
 
         self.assertEqual(
-            tuple(delete_duplicates((1, 2, 3, 2, 3, 4))),
+            delete_duplicates((1, 2, 3, 2, 3, 4)),
             (1, 2, 3, 4)
+        )
+
+
+        self.assertEqual(
+            delete_duplicates(
+                (
+                    {'price': 20, 'mode': 'tomorrow'}, 
+                    {'price': 30, 'mode': 'asap'},
+                    {'price': 40, 'mode': 'tomorrow'},
+                    {'price': 50, 'mode': 'asap'}, 
+                    {'price': 10, 'mode': 'asap'}, 
+                ),
+                key = lambda data: data['mode']
+            ), (
+                {'price': 20, 'mode': 'tomorrow'}, 
+                {'price': 30, 'mode': 'asap'},
+            )
         )
