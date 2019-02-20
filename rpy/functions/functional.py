@@ -3,6 +3,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import inspect
+from collections import OrderedDict
 from functools import reduce
 from itertools import islice
 
@@ -81,3 +82,6 @@ def partition(iterable, n):
     while len(res) != 0:
         yield res
         res = tuple(islice(iterable, n))
+
+def delete_duplicates(iterable, key = identity):
+    return OrderedDict((key(el), el) for el in iterable).values()
