@@ -37,7 +37,7 @@ def load_tests():
 
 setup(
     name = 'python-rpy',
-    version = '1.0.14',
+    version = '1.0.15',
     description = 'A Python library with various functional tools.',
     long_description = read('README.rst'),
     long_description_content_type = 'text/x-rst',
