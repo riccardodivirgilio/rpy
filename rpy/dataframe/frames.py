@@ -225,6 +225,10 @@ class DataFrame(Mapping):
             header.value(): header
             for header in self.headers_list
         }
+
+        if not isinstance(data, (tuple, list, set, frozenset)):
+            data = tuple(data)
+
         self.table = tuple(
             ColumnData(
                 data = data, 
