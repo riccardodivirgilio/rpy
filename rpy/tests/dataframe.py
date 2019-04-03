@@ -46,7 +46,7 @@ class DataframeTest(unittest.TestCase):
 
         frames = DataFrames(
             frame_1 = dict(
-                data = [1, 2, 3], 
+                data = range(5), 
                 headers = {
                     'baz':  lambda i: i,
                     'foo':  lambda i: sym.baz + 2,
@@ -57,7 +57,7 @@ class DataframeTest(unittest.TestCase):
                 },
             ),
             frame_2 = dict(
-                data = [1, 2, 3],
+                data = range(3),
                 headers = {
                     'something': lambda i: i,
                     'aggr': lambda i: sym.sum(sym.dataframes['frame_1']['foo'])
