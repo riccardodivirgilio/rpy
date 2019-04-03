@@ -101,6 +101,9 @@ class AtomData(object):
                 workbook_name = None,
             )
 
+        if symbol.__symbolname__ == 'dataframes':
+            return ExcelDataFramesSymbol(self.dataframe.dataframes)
+
         if symbol.__symbolname__ == 'dataframe':
             return ExcelDataFrameSymbol(
                 dataframe = self.dataframe, 
@@ -206,7 +209,7 @@ class ColumnData(object):
 
 class DataFrame(Mapping):
 
-    def __init__(self, data, headers):
+    def __init__(self, data, headers, dataframes = None):
 
         if isinstance(headers, dict):
             self.headers_list = tuple(
@@ -230,6 +233,7 @@ class DataFrame(Mapping):
             )
             for header in self.headers_list
         )
+        self.dataframes = dataframes
 
     def header_lines(self):
         return 1
@@ -272,6 +276,33 @@ class DataFrame(Mapping):
     def __str__(self):
         return format_table(self.formatted())
 
+to_data_frame = Dispatch()
+to_data_frame.register(lambda d, **opts: DataFrame(**opts, **d), dict)
+to_data_frame.register(lambda d, **opts: DataFrame(*d, **opts))
+
+class DataFrames(Mapping):
+
+    def __init__(self, **kwargs):
+        self.kwargs = {
+            key: to_data_frame(value, dataframes = self)
+            for key, value in kwargs.items()
+        }
+
+    def __getitem__(self, k):
+        return self.kwargs.__getitem__(k)
+
+    def __iter__(self):
+        return iter(self.kwargs)
+
+    def __len__(self):
+        return len(self.kwargs)
+
+    def value(self):
+        return {k: v.value() for k, v in self.items()}
+
+    def excel_formula(self):
+        return {k: v.excel_formula() for k, v in self.items()}
+
 class ExcelDataFrameSymbol(Copyable, Symbol):
 
     __slots__ = ('dataframe', 'workbook_name', 'row', 'col')
@@ -303,6 +334,9 @@ class ExcelDataFrameSymbol(Copyable, Symbol):
                 row
             )
 
+        if self.workbook_name:
+            self.__symbolname__ = "'%s'!%s" % (self.workbook_name, self.__symbolname__)
+
     def __getitem__(self, value):
         if not self.row and not self.col:
             return self.copy(col = value)
@@ -312,3 +346,12 @@ class ExcelDataFrameSymbol(Copyable, Symbol):
             return self.copy(col = value)
         else:
             raise KeyError('Workbook already has col and row reference')
+
+class ExcelDataFramesSymbol(Symbol):
+
+    def __init__(self, dataframes):
+        self.dataframes = dataframes
+        self.__symbolname__ = ''
+
+    def __getitem__(self, value):
+        return ExcelDataFrameSymbol(self.dataframes[value], workbook_name = value)

@@ -6,7 +6,7 @@ import datetime
 import unittest
 
 from rpy.dataframe.excel import write_to_stream
-from rpy.dataframe.frames import DataFrame
+from rpy.dataframe.frames import DataFrame, DataFrames
 from rpy.dataframe.symbolic import sym
 from rpy.functions.process import system_open
 
@@ -43,21 +43,32 @@ class DataframeTest(unittest.TestCase):
 
     def test_dataframe_symbolic(self):
 
-        frame = DataFrame(
-            [1, 2, 3], 
-            headers = {
-                'baz':  lambda i: i,
-                'foo':  lambda i: sym.baz + 2,
-                'bar':  lambda i: datetime.datetime.now(),
-                'pow':  lambda i: sym.foo ** 2,
-                'sum1': lambda i: sym.sum(sym.dataframe['baz']),
-                'sum2': lambda i: sym.sum(sym.dataframe['pow']),
-            },
+
+        frames = DataFrames(
+            frame_1 = dict(
+                data = [1, 2, 3], 
+                headers = {
+                    'baz':  lambda i: i,
+                    'foo':  lambda i: sym.baz + 2,
+                    'bar':  lambda i: datetime.datetime.now(),
+                    'pow':  lambda i: sym.foo ** 2,
+                    'sum1': lambda i: sym.sum(sym.dataframe['baz']),
+                    'sum2': lambda i: sym.sum(sym.dataframe['pow']),
+                },
+            ),
+            frame_2 = dict(
+                data = [1, 2, 3],
+                headers = {
+                    'something': lambda i: i,
+                    'aggr': lambda i: sym.sum(sym.dataframes['frame_1']['foo'])
+                }
+            )
+
         )
 
         with open('/Users/rdv/Desktop/test.xlsx', 'wb') as stream:
             write_to_stream(
-                {'formula': frame.excel_formula(), 'value': frame.value()},
+                frames.excel_formula(),
                 stream = stream
             )
 
