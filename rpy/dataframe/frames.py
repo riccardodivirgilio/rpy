@@ -117,7 +117,7 @@ class AtomData(object):
                 col = symbol.__symbolname__,
             )
 
-        raise KeyError
+        raise KeyError(symbol.__symbolname__)
 
 
     def resolve_symbolic_value(self, symbol):
