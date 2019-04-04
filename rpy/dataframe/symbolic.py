@@ -84,7 +84,7 @@ def create_default_context():
         yield name, create_function_call(attr, func)
 
     for func in (
-        sum, float, int, reduce, map, 
+        sum, float, int, reduce, map, min, max
         ):
         yield func.__name__, create_shield_func(func)
 
