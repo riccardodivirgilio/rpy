@@ -50,6 +50,7 @@ class DataframeTest(unittest.TestCase):
                 headers = {
                     'baz':  lambda i: i,
                     'foo':  lambda i: sym.baz + 2,
+                    'mul':  lambda i: sym.min(sym.baz, sym.foo * 3, 2),
                     'bar':  lambda i: datetime.datetime.now(),
                     'pow':  lambda i: sym.foo ** 2,
                     'sum1': lambda i: sym.sum(sym.dataframe['baz']),
@@ -60,7 +61,7 @@ class DataframeTest(unittest.TestCase):
                 data = (i+1 for i in range(3)), 
                 headers = {
                     'something': lambda i: i,
-                    'aggr': lambda i: sym.sum(sym.dataframes['frame_1']['foo'])
+                    'aggr': lambda i: sym.min(sym.dataframes['frame_1']['foo'], sym.something)
                 }
             )
 
