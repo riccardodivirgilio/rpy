@@ -42,6 +42,9 @@ def get_excel_names(r):
 def excel_enumerate(iterable):
     return zip(count(), _column_name_generator(), iterable)
 
+class FormulaText(str):
+    pass
+
 class CallableText(object):
 
     operators = {
@@ -61,9 +64,7 @@ class CallableText(object):
         self.name = force_text(symbol)
 
     def __call__(self, *args):
-
         args = self.normalize_args(args)
-
         try:
             inner = self.operators[self.name].join(args)
             templ = self.functions.get(self.name, None) or '(%s)'
@@ -71,16 +72,18 @@ class CallableText(object):
             inner = ', '.join(args)
             templ = self.functions.get(self.name, None) or (self.name.upper() + '(%s)')
 
-        return templ % inner
+        return FormulaText(templ % inner)
 
     def normalize_args(self, args):
         for arg in args:
             if isinstance(arg, CallableText):
-                yield force_text(arg)
+                yield FormulaText(arg)
             else:
                 arg = to_formula(arg)
                 if isinstance(arg, Formula):
-                    yield force_text(arg)
+                    yield FormulaText(arg)
+                elif isinstance(arg, FormulaText):
+                    yield arg
                 elif arg:
                     yield escape(arg)
 
