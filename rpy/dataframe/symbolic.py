@@ -51,6 +51,12 @@ builtin = (
     ('__coerce__', 'coerce', None),
     ('__getattr__', 'getattr', getattr),
     ('__getitem__', 'getitem', None),
+    ('__lt__', 'lt', None),
+    ('__le__', 'le', None),
+    ('__eq__', 'eq', None),
+    ('__ne__', 'ne', None),
+    ('__ge__', 'ge', None),
+    ('__gt__', 'gt', None),
 )
 
 def call(attr, obj, *args, **opts):
@@ -88,6 +94,11 @@ def create_default_context():
         ):
         yield func.__name__, create_shield_func(func)
 
+    for name, func in (
+        ('if', lambda cond, true, false: true if cond else false),
+        ):
+        yield name, func
+
 def proxy(attr, self, *args, **kwargs):
     return Symbol(attr)(self, *args, **kwargs)
 
@@ -117,9 +128,6 @@ class Symbol(ExpressionMeta):
 
     def __len__(self):
         return 0  #consistent with Length(x)
-
-    def __eq__(self, other):
-        return isinstance(other, Symbol) and self.__symbolname__ == other.__symbolname__
 
     def __repr__(self):
         return self.__symbolname__
@@ -158,6 +166,9 @@ class Function(ExpressionMeta):
 class SymbolFactory(object):
 
     def __getattr__(self, attr):
+        return Symbol(attr)
+
+    def __getitem__(self, attr):
         return Symbol(attr)
 
 evaluate_with_context = Dispatch()

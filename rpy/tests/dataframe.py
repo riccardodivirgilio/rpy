@@ -55,15 +55,18 @@ class DataframeTest(unittest.TestCase):
                     'pow':  lambda i: sym.foo ** 2,
                     'sum1': lambda i: sym.sum(sym.dataframe['baz']),
                     'sum2': lambda i: sym.sum(sym.dataframe['pow']),
-                    'cond': lambda i: bool(i % 2),
+                    'cond1': lambda i: bool(i % 2),
+                    'cond2': lambda i: sym.IF(sym.foo == 2, None, 1),
                 },
             ),
             frame_2 = dict(
                 data = (i+1 for i in range(3)), 
                 headers = {
-                    'formula':   lambda i: sym.AND(1, 2, 3),
-                    'something': lambda i: i,
-                    'aggr':      lambda i: sym.min(sym.dataframes['frame_1']['foo'], sym.something)
+                    'formula': lambda i: sym.AND(1, 2, 3),
+                    'comp1':   lambda i: sym.dataframes['frame_1']['foo'] > 2,
+                    'comp2':   lambda i: sym.comp1 == 3,
+                    'aggr':    lambda i: sym.min(sym.dataframes['frame_1']['foo'], sym.something),
+
                 }
             )
         )

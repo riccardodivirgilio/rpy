@@ -54,6 +54,14 @@ class CallableText(object):
         'pow': '^',
         'truediv': ' / ',
         'floordiv': ' / ',
+
+        'lt': ' < ',
+        'le': ' <= ',
+        'eq': ' = ',
+        'ne': ' <> ',
+        'ge': ' >= ',
+        'gt': ' > ',
+
     }
 
     functions = {
@@ -84,8 +92,10 @@ class CallableText(object):
                     yield FormulaText(arg)
                 elif isinstance(arg, FormulaText):
                     yield arg
-                elif arg:
+                elif isinstance(arg, six.string_types):
                     yield escape(arg)
+                else:
+                    raise NotImplementedError(arg)
 
     def __str__(self):
         return self.name
