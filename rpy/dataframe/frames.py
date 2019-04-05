@@ -57,7 +57,7 @@ class DataHeader(Copyable):
         return force_text(self.formatter(value))
 
     def formatted(self):
-        return self.short_description or self.value().title()
+        return self.short_description or self.value()
 
     def excel_formula(self):
         return self.formatted()
@@ -117,7 +117,7 @@ class AtomData(object):
                 col = symbol.__symbolname__,
             )
 
-        raise KeyError(symbol.__symbolname__)
+        return symbol
 
 
     def resolve_symbolic_value(self, symbol):
