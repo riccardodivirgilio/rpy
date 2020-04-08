@@ -44,9 +44,8 @@ class TestCase(unittest.TestCase):
         )
 
     def test_map_indexed(self):
-        #self.compare_array(numpy.map_indexed(lambda x, i: x + i, numpy.arange(10)), numpy.arange(10) * 2)
-        pass
-
+        self.compare_array(numpy.map_indexed(lambda x, i: x + i, numpy.arange(10)), numpy.arange(10) * 2)
+        
 
     def test_filter(self):
 
