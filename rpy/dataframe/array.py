@@ -17,25 +17,33 @@ def render_value(value, array):
 
 @to_array.dispatch(dict)
 def render_value(d, array):
+
+    #same implementation of np.core.records.fromarrays
+
     columns = {
         k: to_array(v, array)
         for k, v in d.items()
     }
-    return np.core.records.fromarrays(
-        tuple(
-            columns.values()
-        ),
-        names = tuple(columns.keys())
+
+    a = np.recarray(
+        (len(array), ), 
+        list((k, v.dtype) for k, v in columns.items())
     )
+
+    for k, v in columns.items():
+        a[k] = v
+
+    return a
 
 
 @to_array.dispatch((list, tuple, types.GeneratorType))
 def render_value(value, array):
-    return np.core.records.fromarrays(
-        tuple(
-            to_array(v, array)
-            for v in value
-        )
+    return to_array(
+        {
+            'f%i' % (i): v
+            for i, v in enumerate(value)
+        },
+        array
     )
 
 def array_map(func, array):
