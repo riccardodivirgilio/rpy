@@ -23,7 +23,7 @@ class TestCase(unittest.TestCase):
 
         # double array
         self.compare_array(
-            numpy.map(lambda x: [x, 2.0], numpy.arange(10)),
+            numpy.map(lambda x: (x, 2.0), numpy.arange(10)),
             numpy.core.records.fromarrays((numpy.arange(10), numpy.full(10, 2.0))),
         )
 
@@ -42,6 +42,11 @@ class TestCase(unittest.TestCase):
             ),
             numpy.arange(10) + 2.0,
         )
+
+    def test_map_indexed(self):
+        #self.compare_array(numpy.map_indexed(lambda x, i: x + i, numpy.arange(10)), numpy.arange(10) * 2)
+        pass
+
 
     def test_filter(self):
 

@@ -48,4 +48,5 @@ numpy = API(
     core="numpy.core",
     filter="rpy.dataframe.array.array_filter",
     map="rpy.dataframe.array.array_map",
+    map_indexed="rpy.dataframe.array.array_map_indexed",
 )
