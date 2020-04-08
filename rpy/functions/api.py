@@ -6,7 +6,7 @@ from rpy.functions.encoding import force_bytes
 from rpy.functions.importutils import API
 
 pip = API(
-    main=('pip.main', 'pip._internal.main'),
+    main=("pip.main", "pip._internal.main", "pip._internal.main.main"),
     get_installed_distributions=(
         'pip.get_installed_distributions',
         'pip.utils.get_installed_distributions',
