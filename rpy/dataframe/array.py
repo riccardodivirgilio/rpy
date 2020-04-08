@@ -1,7 +1,10 @@
-import numpy as np
-from rpy.dataframe.symbolic import Symbolic, evaluate, sym
-from rpy.functions.functional import iterate, partial, reduce
+from __future__ import absolute_import, print_function, unicode_literals
+
 import types
+
+import numpy as np
+
+from rpy.dataframe.symbolic import Symbolic, evaluate, sym
 from rpy.functions.dispatch import Dispatch
 
 to_array = Dispatch()
@@ -51,5 +54,3 @@ def array_map(func, array):
 
 def array_filter(func, array):
     return array[array_map(func, array)]
-
-

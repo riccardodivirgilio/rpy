@@ -6,6 +6,7 @@ import unittest
 
 from rpy.functions.api import numpy
 
+
 class TestCase(unittest.TestCase):
 
     def compare_array(self, a1, a2):
