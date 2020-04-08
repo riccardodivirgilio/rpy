@@ -40,7 +40,7 @@ def render_value(d, array):
 def render_value(value, array):
     return to_array(
         {
-            'f%i' % (i): v
+            'f%i' % i: v
             for i, v in enumerate(value)
         },
         array
