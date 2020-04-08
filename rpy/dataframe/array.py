@@ -21,11 +21,11 @@ def render_value(d, array):
 
     # same implementation of np.core.records.fromarrays
 
-    columns = {k: to_array(v, array) for k, v in d.items()}
+    columns = tuple((k, to_array(v, array)) for k, v in d.items())
 
-    a = np.recarray((len(array),), list((k, v.dtype) for k, v in columns.items()))
+    a = np.recarray((len(array),), list((k, v.dtype) for k, v in columns))
 
-    for k, v in columns.items():
+    for k, v in columns:
         a[k] = v
 
     return a
