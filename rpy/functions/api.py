@@ -40,3 +40,15 @@ asyncio = API(
     new_event_loop = 'asyncio.new_event_loop',
     set_event_loop = 'asyncio.set_event_loop',
 )
+
+numpy = API(
+    ndarray = 'numpy.ndarray',
+    array = 'numpy.array',
+    arange = 'numpy.arange',
+    full = 'numpy.full',
+    dstack = 'numpy.dstack',
+    core = 'numpy.core',
+
+    filter = 'rpy.dataframe.array.array_filter',
+    map = 'rpy.dataframe.array.array_map',
+)
