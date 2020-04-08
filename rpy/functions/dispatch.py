@@ -1,23 +1,21 @@
-# -*- coding: utf-8 -*-
-
 from __future__ import absolute_import, print_function, unicode_literals
-
-import inspect
 
 from rpy.functions.functional import flatten
 
-#original idea by Guido in person.
-#https://www.artima.com/weblogs/viewpost.jsp?thread=101605
+import inspect
+
+# original idea by Guido in person.
+# https://www.artima.com/weblogs/viewpost.jsp?thread=101605
 
 class Dispatch(object):
     """ A method dispatcher class allowing for multiple implementations of a function. Each implementation is associated to a specific input type.
-    
+
     Implementations are registered with the annotation :meth:`~wolframclient.utils.dispatch.Dispatch.dispatch`.
 
     The Dispatch class is callable, it behaves as a function that uses the implementation corresponding to the input parameter.
 
-    When a type is a subtype, the type and its parents are checked in the order given by :data:`__mro__` (method resolution order). 
-        
+    When a type is a subtype, the type and its parents are checked in the order given by :data:`__mro__` (method resolution order).
+
     *Example:* method :meth:`~wolframclient.utils.dispatch.Dispatch.resolve` applied to an instance of :class:`collections.OrderedDict`,
     check for the first implementation to match with :class:`collections.OrderedDict`, then with :class:`dict`, and ultimately to :data:`object`.
 
@@ -29,7 +27,7 @@ class Dispatch(object):
 
     def dispatch(self, *args, **opts):
         """ Annotate a function and map it to a given set of type(s).
-        
+
         Declare an implementation to use on :data:`bytearray` input::
 
             @dispatcher.dispatch(bytearray)
@@ -40,13 +38,13 @@ class Dispatch(object):
             @dispatcher.dispatch(object)
             def my_default_func(...)
 
-        A tuple can be used as input to associate more than one type with a function. 
+        A tuple can be used as input to associate more than one type with a function.
         Declare a function used for both :data:`bytes` and :data:`bytearray`::
 
             @dispatcher.dispatch((bytes, bytearray))
             def my_func(...)
 
-        Implementation must be unique. Registering the same combination of types will raise an error, 
+        Implementation must be unique. Registering the same combination of types will raise an error,
         except if `force` is set to :data:`True`, in which case the mapping is updated.
         """
 
@@ -57,36 +55,35 @@ class Dispatch(object):
 
     def update(self, dispatch, force=False):
         """ Update current mapping with the one from `dispatch`.
-        
+
         `dispatch` can be a Dispatch instance or a :class:`dict`. """
         if isinstance(dispatch, Dispatch):
             dispatchmapping = dispatch.dispatch_dict
         elif isinstance(dispatch, dict):
             dispatchmapping = dispatch
         else:
-            raise ValueError('%s is not an instance of Dispatch' % dispatch)
+            raise ValueError("%s is not an instance of Dispatch" % dispatch)
         for t, function in dispatchmapping.items():
             self.register(function, t, force=force)
 
     def validate_types(self, types):
         for t in frozenset(flatten(types)):
             if not inspect.isclass(t):
-                raise ValueError('%s is not a class' % t)
+                raise ValueError("%s is not a class" % t)
             yield t
 
     def register(self, function, types=object, force=False):
-        """ Equivalent to annotation :meth:`~wolframclient.utils.dispatch.Dispatch.dispatch` but as 
+        """ Equivalent to annotation :meth:`~wolframclient.utils.dispatch.Dispatch.dispatch` but as
         a function.
         """
         if not callable(function):
-            raise ValueError('Function %s is not callable' % function)
+            raise ValueError("Function %s is not callable" % function)
 
         self.clear_cache()
 
         for t in self.validate_types(types):
             if not force and t in self.dispatch_dict:
-                raise TypeError(
-                    "Duplicated registration for input type(s): %s" % (t, ))
+                raise TypeError("Duplicated registration for input type(s): %s" % (t,))
             else:
                 self.dispatch_dict[t] = function
 
@@ -127,14 +124,14 @@ class Dispatch(object):
 
     def default_function(self, *args, **opts):
         """ Ultimately called when no type was found. """
-        raise ValueError('Unable to handle args')
+        raise ValueError("Unable to handle args")
 
     def __call__(self, arg, *args, **opts):
         return self.resolve(arg)(arg, *args, **opts)
 
     def as_method(self):
-        """ Return the dispatch as a class method. 
-        
+        """ Return the dispatch as a class method.
+
         Create a new dispatcher::
 
             dispatch = Dispatcher()
@@ -145,7 +142,7 @@ class Dispatch(object):
                 myMethod = dispatch.as_method()
 
         Call the class method::
-            
+
             o = MyClass()
             o.myMethod(arg, *args, **kwargs)
 

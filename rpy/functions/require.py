@@ -1,15 +1,11 @@
-# -*- coding: utf-8 -*-
-
 from __future__ import absolute_import, print_function, unicode_literals
 
 from functools import wraps
 
 from rpy.functions.api import pip
 
-
 def installed_modules():
     return {i.key: i.version for i in pip.get_installed_distributions()}
-
 
 def missing_requirements(*modules):
 
@@ -20,10 +16,8 @@ def missing_requirements(*modules):
         if isinstance(module, (tuple, list)):
             module, version = module
 
-        if not module in distributions or version and not distributions[
-                module] == version:
+        if not module in distributions or version and not distributions[module] == version:
             yield version and "%s==%s" % (module, version) or module
-
 
 def require_module(*modules):
 
@@ -37,7 +31,6 @@ def require_module(*modules):
             pip.main(["install"] + commands)
         else:
             pip.main(["install", "--user"] + commands)
-
 
 def require(*modules):
     def outer(func):

@@ -1,32 +1,32 @@
-# -*- coding: utf-8 -*-
-
 from __future__ import absolute_import, print_function, unicode_literals
+
+from itertools import chain
 
 import datetime
 import decimal
 import platform
 import sys
 import types
-from itertools import chain
 
-#stripped version of SIX
+# stripped version of SIX
 
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
 
-WINDOWS = platform.system() == 'Windows'
+WINDOWS = platform.system() == "Windows"
 
-JYTHON = sys.platform.startswith('java')
+JYTHON = sys.platform.startswith("java")
 
 if PY3:
-    string_types = str,
-    integer_types = int,
-    class_types = type,
+    string_types = (str,)
+    integer_types = (int,)
+    class_types = (type,)
     text_type = str
     binary_type = bytes
     none_type = type(None)
 
     import io
+
     StringIO = io.StringIO
     BytesIO = io.BytesIO
 
@@ -34,7 +34,7 @@ if PY3:
     buffer_types = (bytes, bytearray, memoryview)
 
 else:
-    string_types = basestring,
+    string_types = (basestring,)
     integer_types = (int, long)
     class_types = (type, types.ClassType)
     text_type = unicode
@@ -42,6 +42,7 @@ else:
     none_type = types.NoneType
 
     import StringIO
+
     StringIO = BytesIO = StringIO.StringIO
 
     # memoryview and buffer are not strictly equivalent, but should be fine for
@@ -56,6 +57,17 @@ else:
 iterable_types = (list, tuple, set, frozenset, types.GeneratorType)
 
 protected_types = tuple(
-    chain(string_types, integer_types,
-          (float, decimal.Decimal, datetime.date, datetime.datetime,
-           datetime.time, bool, none_type)))
+    chain(
+        string_types,
+        integer_types,
+        (
+            float,
+            decimal.Decimal,
+            datetime.date,
+            datetime.datetime,
+            datetime.time,
+            bool,
+            none_type,
+        ),
+    )
+)

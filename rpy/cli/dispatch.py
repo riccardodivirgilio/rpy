@@ -1,18 +1,15 @@
-# -*- coding: utf-8 -*-
-
 from __future__ import absolute_import, print_function, unicode_literals
 
-import sys
-
-from rpy.cli.utils import SimpleCommand, discover_with_convention
+from rpy.cli.utils import discover_with_convention, SimpleCommand
 from rpy.functions.importutils import import_string
 from rpy.functions.require import require_module
 
+import sys
 
 class DispatchCommand(SimpleCommand):
 
-    modules = ['rpy.cli.commands']
-    class_name = 'Command'
+    modules = ["rpy.cli.commands"]
+    class_name = "Command"
 
     default_command = None
 
@@ -30,11 +27,12 @@ class DispatchCommand(SimpleCommand):
 
         if attr in all_commands:
             return import_string(all_commands[attr])(
-                self.subcommand_args(), name=all_commands[attr]).main()
+                self.subcommand_args(), name=all_commands[attr]
+            ).main()
 
-        self.print('Select one of the following commands:')
+        self.print("Select one of the following commands:")
         for command in sorted(all_commands.keys()):
-            self.print(' -', command)
+            self.print(" -", command)
 
         sys.exit(1)
 
@@ -52,7 +50,6 @@ class DispatchCommand(SimpleCommand):
         if len(self.argv) > 1 and self.argv[1]:
             return self.handle(self.argv[1])
         return self.handle()
-
 
 def execute_from_command_line(argv=None, **opts):
     return DispatchCommand(argv).main()

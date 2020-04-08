@@ -1,19 +1,20 @@
-# -*- coding: utf-8 -*-
-
 from __future__ import absolute_import, print_function, unicode_literals
-
-import sys
 
 from rpy.cli.utils import SimpleCommand
 from rpy.functions.importutils import module_path
 
+import sys
 
 class Command(SimpleCommand):
 
-    modules = ['rpy']
+    modules = ["rpy"]
 
-    dependencies = (('autopep8', '1.4'), ('isort', '4.3.4'),
-                    ('yapf', '0.24.0'), ('autoflake', '1.2'))
+    dependencies = (
+        ("autopep8", "1.4"),
+        ("isort", "4.3.4"),
+        ("yapf", "0.24.0"),
+        ("autoflake", "1.2"),
+    )
 
     def _module_args(self, *args):
 
@@ -26,18 +27,23 @@ class Command(SimpleCommand):
             yield arg
 
     def add_arguments(self, parser):
-        parser.add_argument('--yapf', dest='use_yapf', default=False, action = 'store_true')
+        parser.add_argument("--yapf", dest="use_yapf", default=False, action="store_true")
 
-    def handle(self, use_yapf = False, **opts):
+    def handle(self, use_yapf=False, **opts):
 
         argv = sys.argv
 
         from autoflake import main
 
         sys.argv = tuple(
-            self._module_args('--in-place', '--remove-duplicate-keys',
-                              '--expand-star-import',
-                              '--remove-all-unused-imports', '--recursive'))
+            self._module_args(
+                "--in-place",
+                "--remove-duplicate-keys",
+                "--expand-star-import",
+                "--remove-all-unused-imports",
+                "--recursive",
+            )
+        )
 
         main()
 
@@ -45,9 +51,13 @@ class Command(SimpleCommand):
 
         sys.argv = list(
             self._module_args(
-                '-rc', '--multi-line', '5', '-a',
-                "from __future__ import absolute_import, print_function, unicode_literals"
-            ))
+                "-rc",
+                "--multi-line",
+                "5",
+                "-a",
+                "from __future__ import absolute_import, print_function, unicode_literals",
+            )
+        )
 
         main()
 
@@ -55,8 +65,7 @@ class Command(SimpleCommand):
 
             import yapf
 
-            sys.argv = list(
-                self._module_args('--in-place', '--recursive', '--parallel'))
+            sys.argv = list(self._module_args("--in-place", "--recursive", "--parallel"))
 
             yapf.run_main()
 

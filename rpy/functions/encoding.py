@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-
 from __future__ import absolute_import, print_function, unicode_literals
 
 from rpy.functions import six
 
-
-def force_text(s, encoding='utf-8', errors='strict'):
+def force_text(s, encoding="utf-8", errors="strict"):
     """
     Similar to smart_text, except that lazy instances are resolved to
     strings, rather than kept as lazy objects.
@@ -21,7 +18,7 @@ def force_text(s, encoding='utf-8', errors='strict'):
                 s = six.text_type(s, encoding, errors)
             else:
                 s = six.text_type(s)
-        elif hasattr(s, '__unicode__'):
+        elif hasattr(s, "__unicode__"):
             s = six.text_type(s)
         else:
             s = six.text_type(bytes(s), encoding, errors)
@@ -32,17 +29,16 @@ def force_text(s, encoding='utf-8', errors='strict'):
         s = s.decode(encoding, errors)
     return s
 
-
-def force_bytes(s, encoding='utf-8', errors='strict'):
+def force_bytes(s, encoding="utf-8", errors="strict"):
     """
     If strings_only is True, don't convert (some) non-string-like objects.
     """
     # Handle the common case first for performance reasons.
     if isinstance(s, bytes):
-        if encoding == 'utf-8':
+        if encoding == "utf-8":
             return s
         else:
-            return s.decode('utf-8', errors).encode(encoding, errors)
+            return s.decode("utf-8", errors).encode(encoding, errors)
 
     if isinstance(s, six.buffer_types):
         return bytes(s)
@@ -58,15 +54,13 @@ def force_bytes(s, encoding='utf-8', errors='strict'):
                 # An Exception subclass containing non-ASCII data that doesn't
                 # know how to print itself properly. We shouldn't raise a
                 # further exception.
-                return b' '.join(
-                    force_bytes(arg, encoding, errors=errors) for arg in s)
+                return b" ".join(force_bytes(arg, encoding, errors=errors) for arg in s)
             return six.text_type(s).encode(encoding, errors)
     else:
         return s.encode(encoding, errors)
 
-
 def safe_force_text(obj):
     try:
-        return force_text(obj, errors='ignore')
+        return force_text(obj, errors="ignore")
     except Exception as e:
-        return '<unprintable obj: %s>' % e
+        return "<unprintable obj: %s>" % e
