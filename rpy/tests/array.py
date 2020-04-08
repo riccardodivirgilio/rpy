@@ -62,6 +62,18 @@ class TestCase(unittest.TestCase):
             )
         )
 
+        #double map
+        self.compare_array(
+            numpy.map(
+                lambda x: x.a + x.b,
+                numpy.map(
+                    lambda x: {'a': x, 'b': 2.},
+                    numpy.arange(10)
+                )
+            ),
+            numpy.arange(10) + 2.
+        )
+
     def test_filter(self):
 
         self.compare_array(
