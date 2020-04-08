@@ -17,12 +17,10 @@ def render_value(value, array):
 
 @to_array.dispatch(dict)
 def render_value(d, array):
-
     columns = {
         k: to_array(v, array)
         for k, v in d.items()
     }
-
     return np.core.records.fromarrays(
         tuple(
             columns.values()
@@ -33,22 +31,12 @@ def render_value(d, array):
 
 @to_array.dispatch((list, tuple, types.GeneratorType))
 def render_value(value, array):
-
     return np.core.records.fromarrays(
         tuple(
             to_array(v, array)
             for v in value
         )
     )
-
-    return np.stack(
-        tuple(
-            to_array(v, array)
-            for v in value
-        ),
-        axis = -1
-    )
-
 
 def array_map(func, array):
     return to_array(func(sym.array), array = array)
