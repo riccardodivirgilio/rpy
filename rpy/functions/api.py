@@ -35,6 +35,7 @@ fernet = API(
 
 asyncio = API(
     wait = 'asyncio.wait',
+    gather = 'asyncio.gather',
     ensure_future = 'asyncio.ensure_future',
     get_event_loop = 'asyncio.get_event_loop',
     new_event_loop = 'asyncio.new_event_loop',

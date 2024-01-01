@@ -13,21 +13,10 @@ async def _id(id, task):
     return id, await task
 
 async def wait_all(*args):
-    done = tuple(_id(i, t) for i, t in enumerate(iterate(*args)))
-    if done:
-        futures, p = await asyncio.wait(done)
-        futures = dict(map(methodcaller('result'), futures))
-        return tuple(futures[i] for i in range(len(done)))
-    return done
+    return await asyncio.gather(*iterate(*args))
 
 def run_all(*args, **opts):
-    done = tuple(iterate(*args))
-    if done and len(done) > 1:
-        return asyncio.ensure_future(asyncio.wait(done), **opts)
-    elif done:
-        return asyncio.ensure_future(first(done), **opts)
-    return done
-
+    return asyncio.ensure_future(wait_all(*args), **opts)
 
 def get_event_loop(loop=None):
     try:
@@ -36,9 +25,6 @@ def get_event_loop(loop=None):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         return loop
-
-
-
 
 @to_tuple
 def syncronous_wait_all(*args, loop=None):
